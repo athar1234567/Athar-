@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATHAR</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  direction: rtl;
+  background: #eef2f5;
+  transition: 0.3s;
+}
+
+.dark {
+  background: #1a1a1a;
+  color: white;
+}
+
+header {
+  background: linear-gradient(to right, #0f9b8e, #1e3c72);
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.container {
+  padding: 15px;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.dark .card {
+  background: #2c2c2c;
+}
+
+input {
+  padding: 10px;
+  width: 65%;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #0f9b8e;
+  color: white;
+  cursor: pointer;
+}
+
+li {
+  list-style: none;
+  padding: 8px;
+  margin: 5px 0;
+  background: #ddd;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dark li {
+  background: #444;
+}
+
+.top-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+/* Chat */
+.chat-box {
+  height: 150px;
+  overflow-y: auto;
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.dark .chat-box {
+  background: #333;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1 id="title">أَثَر | ATHAR</h1>
+  <p id="subtitle">وقتٌ يُرضي الله… وأثرٌ يدوم</p>
+</header>
+
+<div class="top-buttons">
+  <button onclick="toggleLang()">🌐</button>
+  <button onclick="toggleDark()">🌙</button>
+</div>
+
+<div class="container">
+
+<!-- 🌙 النية -->
+<div class="card">
+  <h2 id="niyaTitle">🌙 النية</h2>
+  <input id="niya" placeholder="ما نيتك اليوم؟">
+  <button onclick="saveNiya()">حفظ</button>
+  <p id="showNiya"></p>
+</div>
+
+<!-- ✅ المهام -->
+<div class="card">
+  <h2 id="taskTitle">✅ المهام</h2>
+  <input id="task" placeholder="أضف مهمة">
+  <button onclick="addTask()">+</button>
+  <ul id="list"></ul>
+</div>
+
+<!-- 📊 الرسم -->
+<div class="card">
+  <h2>📊</h2>
+  <canvas id="chart"></canvas>
+</div>
+
+<!-- 🤖 مساعد -->
+<div class="card">
+  <h2>🤖 مساعدك</h2>
+  <div class="chat-box" id="chat"></div>
+  <input id="msg" placeholder="اكتب رسالة">
+  <button onclick="sendMsg()">إرسال</button>
+</div>
+
+</div>
+
+<script>
+
+// 🌙 النية
+function saveNiya() {
+  let n = niya.value;
+  localStorage.setItem("niya", n);
+  showNiya.textContent = n;
+}
+
+// تحميل النية
+window.onload = () => {
+  showNiya.textContent = localStorage.getItem("niya") || "";
+};
+
+// ✅ المهام
+function addTask() {
+  let t = task.value;
+  let li = document.createElement("li");
+
+  li.innerHTML = t + " <button onclick='this.parentElement.remove()'>❌</button>";
+  list.appendChild(li);
+}
+
+// 📊 الرسم
+new Chart(document.getElementById("chart"), {
+  type: "doughnut",
+  data: {
+    labels: ["عبادة", "عمل", "راحة"],
+    datasets: [{ data: [2, 5, 3] }]
+  }
+});
+
+// 🌐 اللغة
+let lang = "ar";
+
+function toggleLang() {
+  if (lang === "ar") {
+    title.textContent = "ATHAR";
+    subtitle.textContent = "Time with Purpose. Impact that Lasts.";
+    niyaTitle.textContent = "Intention";
+    taskTitle.textContent = "Tasks";
+    lang = "en";
+    document.body.style.direction = "ltr";
+  } else {
+    location.reload();
+  }
+}
+
+// 🌙 الوضع الليلي
+function toggleDark() {
+  document.body.classList.toggle("dark");
+}
+
+// 🤖 مساعد بسيط
+function sendMsg() {
+  let m = msg.value;
+  let chat = document.getElementById("chat");
+
+  chat.innerHTML += "<p>👤 " + m + "</p>";
+
+  let reply = "استمر 👍";
+  if(m.includes("تعب")) reply = "خذ استراحة قصيرة 🌿";
+  if(m.includes("نجحت")) reply = "ما شاء الله! 👏";
+
+  chat.innerHTML += "<p>🤖 " + reply + "</p>";
+}
+<style>
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+}
+
+nav {
+  background: #1e293b;
+  padding: 15px;
+}
+
+nav a {
+  color: #38bdf8;
+  margin: 10px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #facc15;
+}
+</style>
+<nav>
+  <a href="index.html">الرئيسية</a>
+  <a href="about.html">عن الموقع</a>
+  <a href="contact.html">تواصل</a>
+</nav>
+</script>
+
+</body>
+</html>
